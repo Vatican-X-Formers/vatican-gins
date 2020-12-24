@@ -65,7 +65,7 @@ FunnelTransformerLM.vocab_size = %vocab_size
 # ==============================================================================
 train.inputs = @trax.data.inputs.random_sequence_inputs
 # train.inputs = @trax.data.inputs.addition_inputs
-train.eval_frequency = 1000
+train.eval_frequency = 5000
 train.eval_steps = 200
 train.optimizer = @trax.optimizers.Adam
 train.steps = 10000
