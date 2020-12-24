@@ -72,6 +72,6 @@ train.inputs = @trax.data.inputs.sequence_copy_inputs
 train.eval_frequency = 1000
 train.eval_steps = 200
 train.optimizer = @trax.optimizers.Adam
-train.steps = 100000
+train.steps = 10000
 # train.model = @trax.models.TransformerLM
 train.model = @trax.models.FunnelTransformerLM
