@@ -62,10 +62,6 @@ train.save_graphs = False
 train.checkpoints_at = \
     []
 
-# Parameters for LeakyRelu:
-# ==============================================================================
-LeakyRelu.a = 0.1
-
 # Parameters for UFunnel:
 # ==============================================================================
 UFunnel.d_ff = 2048
