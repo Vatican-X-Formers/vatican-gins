@@ -19,8 +19,8 @@ import trax.data.tf_inputs
 import trax.supervised.trainer_lib
 
 vocab_size = 3  #  For addition, base = vocab_size - 3.
-max_len = 64
-twice_max_len = 128
+max_len = 48
+twice_max_len = 96
 
 # Parameters for data_streams:
 # ==============================================================================
