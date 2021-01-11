@@ -1,0 +1,109 @@
+import trax.data.tf_inputs
+import trax.layers
+import trax.models
+import trax.optimizers
+import trax.supervised.trainer_lib
+
+# Parameters for Adam:
+# ==============================================================================
+Adam.b1 = 0.9
+Adam.b2 = 0.98
+Adam.clip_grad_norm = None
+Adam.eps = 1e-09
+Adam.learning_rate = 0.0001
+Adam.weight_decay_rate = 0.0
+
+# Parameters for backend:
+# ==============================================================================
+backend.name = 'jax'
+
+# Parameters for batcher:
+# ==============================================================================
+batcher.batch_shuffle_size = None
+batcher.batch_size = None
+batcher.batch_size_per_device = 4
+batcher.bucket_length = 32
+batcher.buckets = None
+batcher.buckets_include_inputs_in_length = False
+batcher.data_streams = @tf_inputs.data_streams
+batcher.eval_batch_size = 8
+batcher.id_to_mask = None
+batcher.max_eval_length = 3072
+batcher.strict_pad_on_len = False
+batcher.variable_shapes = True
+
+# Parameters for CausalAttention:
+# ==============================================================================
+# None.
+
+# Parameters for data_streams:
+# ==============================================================================
+data_streams.bare_preprocess_fn = None
+data_streams.data_dir = None
+data_streams.dataset_name = 't2t_image_imagenet32_gen_flat_rev'
+data_streams.eval_holdout_size = 0
+data_streams.input_name = 'targets'
+data_streams.shuffle_buffer_size = 1024
+data_streams.target_name = None
+
+# Parameters for EvalTask:
+# ==============================================================================
+# None.
+
+# Parameters for LayerNorm:
+# ==============================================================================
+LayerNorm.epsilon = 1e-06
+
+# Parameters for multifactor:
+# ==============================================================================
+multifactor.constant = 0.0442
+multifactor.decay_factor = 0.5
+multifactor.factors = 'constant * linear_warmup * rsqrt_decay'
+multifactor.minimum = 0
+multifactor.steps_per_cycle = 100000
+multifactor.steps_per_decay = 20000
+multifactor.warmup_steps = 8000
+
+# Parameters for num_devices:
+# ==============================================================================
+num_devices.value = None
+
+# Parameters for Relu:
+# ==============================================================================
+# None.
+
+# Parameters for train:
+# ==============================================================================
+train.additional_eval_tasks = None
+train.checkpoint_highest = None
+train.checkpoint_lowest = None
+train.checkpoints_at = []
+train.eval_frequency = 500
+train.eval_steps = 256
+train.init_checkpoint = None
+train.loss_chunk_size = 0
+train.metrics = None
+train.model = @trax.models.TransformerLM
+train.optimizer = @trax.optimizers.Adam
+train.permanent_checkpoint_frequency = None
+train.permanent_checkpoints_at = None
+train.random_seed = None
+train.save_graphs = False
+train.steps = 100000
+train.use_loop = True
+train.use_memory_efficient_trainer = False
+
+# Parameters for TransformerLM:
+# ==============================================================================
+TransformerLM.d_ff = 2048
+TransformerLM.d_model = 512
+TransformerLM.dropout = 0.0
+TransformerLM.dropout_shared_axes = None
+TransformerLM.max_len = 3072
+TransformerLM.n_heads = 8
+TransformerLM.n_layers = 12
+TransformerLM.vocab_size = 256
+
+# Parameters for WeightedCategoryAccuracy:
+# ==============================================================================
+# None.
