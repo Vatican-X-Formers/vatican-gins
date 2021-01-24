@@ -30,7 +30,7 @@ data_streams.dataset_name = 'copy'
 # ==============================================================================
 dictionary_lookup_inputs_fft.vocab_size = %vocab_size
 dictionary_lookup_inputs_fft.n_queries = %n_queries
-dictionary_lookup_inputs_fft.pad_to_multiple = 96
+dictionary_lookup_inputs_fft.pad_to_multiple = 256
 dictionary_lookup_inputs_fft.batch_size = 128
 
 # Parameters for multifactor:
@@ -44,7 +44,7 @@ multifactor.warmup_steps = 4000
 Transformer.d_model = 256
 Transformer.d_ff = 512
 Transformer.dropout = 0.05
-Transformer.max_len = 128
+Transformer.max_len = 512
 Transformer.n_heads = 4
 Transformer.input_vocab_size = %vocab_size
 
