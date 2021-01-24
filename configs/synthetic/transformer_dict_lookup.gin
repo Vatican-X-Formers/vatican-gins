@@ -46,7 +46,7 @@ Transformer.d_ff = 512
 Transformer.dropout = 0.05
 Transformer.max_len = 128
 Transformer.n_heads = 4
-Transformer.vocab_size = %vocab_size
+Transformer.input_vocab_size = %vocab_size
 
 # Parameters for train:
 # ==============================================================================
