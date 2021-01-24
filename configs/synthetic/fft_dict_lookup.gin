@@ -51,11 +51,11 @@ TransformerLM.vocab_size = %vocab_size
 
 # Parameters for FullFunnelTransformer:
 # ==============================================================================
-FunnelTransformerLM.d_model = 64
-FunnelTransformerLM.d_ff = 512
-FunnelTransformerLM.max_len = 128
-FunnelTransformerLM.n_heads = 4
-FunnelTransformerLM.input_vocab_size = %vocab_size
+FullFunnelTransformer.d_model = 64
+FullFunnelTransformer.d_ff = 512
+FullFunnelTransformer.max_len = 128
+FullFunnelTransformer.n_heads = 4
+FullFunnelTransformer.input_vocab_size = %vocab_size
 
 # Parameters for train:
 # ==============================================================================
