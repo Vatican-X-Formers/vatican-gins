@@ -65,4 +65,4 @@ train.eval_frequency = 500
 train.eval_steps = 100
 train.optimizer = @trax.optimizers.Adam
 train.steps = 20000
-train.model = @trax.models.FunnelTransformerLM
+train.model = @trax.models.FullFunnelTransformer
