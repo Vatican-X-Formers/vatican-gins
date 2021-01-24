@@ -19,7 +19,7 @@ import trax.data.tf_inputs
 import trax.supervised.trainer_lib
 
 vocab_size = 26  #  For addition, base = vocab_size - 3.
-n_queries = 10
+n_queries = 100
 
 # Parameters for data_streams:
 # ==============================================================================
