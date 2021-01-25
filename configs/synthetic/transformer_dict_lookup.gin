@@ -19,7 +19,7 @@ import trax.data.tf_inputs
 import trax.supervised.trainer_lib
 
 vocab_size = 26  #  For addition, base = vocab_size - 3.
-n_queries = 100
+n_queries = 10
 
 # Parameters for data_streams:
 # ==============================================================================
@@ -30,7 +30,7 @@ data_streams.dataset_name = 'copy'
 # ==============================================================================
 dictionary_lookup_inputs_fft.vocab_size = %vocab_size
 dictionary_lookup_inputs_fft.n_queries = %n_queries
-dictionary_lookup_inputs_fft.pad_to_multiple = 256
+dictionary_lookup_inputs_fft.pad_to_multiple = 96
 dictionary_lookup_inputs_fft.batch_size = 128
 
 # Parameters for multifactor:
@@ -44,7 +44,7 @@ multifactor.warmup_steps = 4000
 Transformer.d_model = 256
 Transformer.d_ff = 512
 Transformer.dropout = 0.05
-Transformer.max_len = 256
+Transformer.max_len = 128
 Transformer.n_heads = 4
 Transformer.input_vocab_size = %vocab_size
 
