@@ -39,19 +39,9 @@ multifactor.constant = 0.05
 multifactor.factors = 'constant * linear_warmup * rsqrt_decay'
 multifactor.warmup_steps = 4000
 
-# Parameters for TransformerLM:
-# ==============================================================================
-TransformerLM.d_model = 256
-TransformerLM.d_ff = 512
-TransformerLM.dropout = 0.05
-TransformerLM.max_len = 128
-TransformerLM.n_heads = 4
-TransformerLM.n_layers = 3
-TransformerLM.vocab_size = %vocab_size
-
 # Parameters for FullFunnelTransformer:
 # ==============================================================================
-FullFunnelTransformer.d_model = 64
+FullFunnelTransformer.d_model = 256
 FullFunnelTransformer.d_ff = 512
 FullFunnelTransformer.max_len = 128
 FullFunnelTransformer.n_heads = 4
