@@ -50,7 +50,7 @@ Transformer.input_vocab_size = %vocab_size
 
 # Parameters for train:
 # ==============================================================================
-train.inputs = @trax.data.inputs.sequence_copy_inputs
+train.inputs = @trax.data.inputs.simple_sequence_copy_inputs
 train.eval_frequency = 500
 train.eval_steps = 100
 train.optimizer = @trax.optimizers.Adam
