@@ -18,6 +18,8 @@ import trax.data.inputs
 import trax.data.tf_inputs
 import trax.supervised.trainer_lib
 
+vocab_size = 26
+
 # Parameters for data_streams:
 # ==============================================================================
 data_streams.data_dir = None
@@ -25,11 +27,11 @@ data_streams.dataset_name = 'copy'
 
 # Parameters for sequence_copy_inputs:
 # ==============================================================================
-sequence_copy_inputs.vocab_size = 26
-sequence_copy_inputs.batch_size = 128
-sequence_copy_inputs.train_length = 30
-sequence_copy_inputs.eval_min_length = 20
-sequence_copy_inputs.eval_max_length = 31
+simple_sequence_copy_inputs.vocab_size = %vocab_size
+simple_sequence_copy_inputs.batch_size = 128
+simple_sequence_copy_inputs.train_length = 30
+simple_sequence_copy_inputs.eval_min_length = 20
+simple_sequence_copy_inputs.eval_max_length = 31
 
 # Parameters for multifactor:
 # ==============================================================================
