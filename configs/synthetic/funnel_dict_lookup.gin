@@ -19,7 +19,6 @@ import trax.data.tf_inputs
 import trax.supervised.trainer_lib
 
 vocab_size = 26  #  For addition, base = vocab_size - 3.
-n_queries = 10
 
 # Parameters for data_streams:
 # ==============================================================================
@@ -29,7 +28,7 @@ data_streams.dataset_name = 'copy'
 # Parameters for sequence_copy_inputs:
 # ==============================================================================
 dictionary_lookup_inputs.vocab_size = %vocab_size
-dictionary_lookup_inputs.n_queries = %n_queries
+dictionary_lookup_inputs.n_queries = 10
 dictionary_lookup_inputs.pad_to_multiple = 96
 dictionary_lookup_inputs.batch_size = 128
 
