@@ -54,7 +54,6 @@ TransformerLM.vocab_size = %vocab_size
 FunnelTransformerLM.d_model = 256
 FunnelTransformerLM.d_ff = 512
 FunnelTransformerLM.dropout = 0.05
-FunnelTransformerLM.max_len = %twice_max_len
 FunnelTransformerLM.n_heads = 4
 FunnelTransformerLM.vanilla_layers=(0, 0)
 FunnelTransformerLM.n_funnel_blocks=(1,)
