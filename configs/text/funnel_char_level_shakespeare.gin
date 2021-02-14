@@ -1,0 +1,84 @@
+# Copyright 2021 The Trax Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import trax.layers
+import trax.models
+import trax.optimizers
+import trax.data.inputs
+import trax.data.tf_inputs
+import trax.supervised.trainer_lib
+
+dataset_name = 'tiny_shakespeare'
+
+max_len = 512
+
+data.Batch.batch_size = 64
+data.Tokenize.vocab_type = 'char'
+data.generate_sequential_chunks.max_length = %max_len
+data.PadToLength.len_map = {0: %max_len}
+data.PadToLength.pad_value = {0: 0}
+
+make_inputs.train_stream = [
+  @train/data.TFDS(),
+  @data.ConvertToUnicode(),
+  @data.Tokenize(),
+  @data.detuplify(),
+  @data.generate_sequential_chunks(),
+  @data.Shuffle(),
+  @data.PadToLength(),
+  @data.ConcatenateToLMInput(),
+  @data.AddLossWeights(),
+  @data.Batch()
+]
+
+data.TFDS.keys = ['text']
+data.TFDS.dataset_name = %dataset_name
+train/data.TFDS.train = True
+eval/data.TFDS.train = False
+
+# Parameters for multifactor:
+# ==============================================================================
+# 0.0442 ~= 512^-0.5 = d_model^-0.5
+multifactor.constant = 0.0442
+multifactor.factors = 'constant * linear_warmup * rsqrt_decay'
+multifactor.warmup_steps = 8000
+
+# Parameters for Adam:
+# ==============================================================================
+Adam.weight_decay_rate = 0.0
+Adam.b1 = 0.9
+Adam.b2 = 0.98
+Adam.eps = 1e-09
+
+# Parameters for train:
+# ==============================================================================
+train.inputs = @data.inputs.make_inputs
+train.eval_frequency = 50
+train.eval_steps = 10
+train.model = @trax.models.FunnelTransformerLM
+# train.model = @trax.models.TransformerLM
+train.optimizer = @trax.optimizers.Adam
+train.steps = 1000
+
+# Parameters for FunnelTransformerLM:
+# ==============================================================================
+FunnelTransformerLM.d_ff = 2048
+FunnelTransformerLM.d_model = 512
+FunnelTransformerLM.dropout = 0.05
+FunnelTransformerLM.n_funnel_blocks = (6,)
+FunnelTransformerLM.n_heads = 8
+FunnelTransformerLM.shorten_factors = (4,)
+FunnelTransformerLM.vanilla_layers = (0, 0)
+FunnelTransformerLM.vocab_size = 256
+FunnelTransformerLM.ff_activation = @trax.layers.FastGelu
