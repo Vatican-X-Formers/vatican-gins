@@ -33,7 +33,7 @@ data_streams.data_dir = None
 data_streams.dataset_name = 'cifar10'
 # data_streams.input_name = 'image'
 # data_streams.target_name = ['image', 'label']
-data_streams.bare_preprocess_fn = @trax.data.tf_inputs.cifar10_gen_cls
+data_streams.preprocess_fn = @trax.data.tf_inputs.cifar10_gen_cls
 
 # Parameters for multifactor:
 # ==============================================================================
