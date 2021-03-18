@@ -22,7 +22,7 @@ import trax.supervised.trainer_lib
 # ==============================================================================
 n_layers = 6
 pos_type = 'fixed-base'
-attn_type = trax.layers.SelfAttention
+attn_type = @trax.layers.SelfAttention
 #@LSHSelfAttention  # @CausalFavor
 
 # Parameters for batcher:
