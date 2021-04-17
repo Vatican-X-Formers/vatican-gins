@@ -51,6 +51,7 @@ train/data.TFDS.keys = ('article', 'abstract')
 train/data.TFDS.train = True
 data.ConvertToUnicode.keys = [0, 1]
 data.Tokenize.vocab_file = 'sentencepiece.model'
+data.Tokenize.vocab_dir = '.'
 data.Tokenize.keys = [0, 1]
 data.Tokenize.vocab_type = 'sentencepiece'
 data.TruncateToLength.len_map = {0: (15359, ), 1: (1023, )}
