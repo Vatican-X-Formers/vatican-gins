@@ -21,10 +21,10 @@ import trax.supervised.trainer_lib
 # Parameters that will vary between experiments:
 # ==============================================================================
 attn_type = [
-    @SelfAttention,
-    @SelfAttention,
+    @trax.layers.SelfAttention,
+    @trax.layers.SelfAttention,
     @LSHSelfAttention,
-    @SelfAttention,
+    @trax.layers.SelfAttention,
 ]
 attn_kv = 64  # Use 128 if more memory is available
 n_layers = 12
