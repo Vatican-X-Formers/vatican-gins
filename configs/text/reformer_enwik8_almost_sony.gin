@@ -20,12 +20,8 @@ import trax.supervised.trainer_lib
 
 # Parameters that will vary between experiments:
 # ==============================================================================
-attn_type = [
-    @trax.layers.SelfAttention,
-    @trax.layers.SelfAttention,
-    @LSHSelfAttention,
-    @trax.layers.SelfAttention,
-]
+attn_type = @trax.layers.SelfAttention
+
 attn_kv = 16  # Use 128 if more memory is available
 n_layers = 12
 dropout = 0.2
