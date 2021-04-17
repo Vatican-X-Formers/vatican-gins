@@ -67,6 +67,11 @@ Adam.b1 = 0.9
 Adam.b2 = 0.98
 Adam.eps = 1e-9
 
+# Parameters for data:
+# ==============================================================================
+data.BucketByLength.boundaries =  [1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072]
+data.BucketByLength.batch_sizes = [128, 64,  32,  16,   8,    1,    1, 1]
+
 # Parameters for train:
 # ==============================================================================
 train.eval_frequency = 500
