@@ -26,9 +26,10 @@ attn_type = [
     @LSHSelfAttention,
     @trax.layers.SelfAttention,
 ]
-attn_kv = 64  # Use 128 if more memory is available
+attn_kv = 16  # Use 128 if more memory is available
 n_layers = 12
 dropout = 0.2
+max_len = 131072
 
 # trax.layers.SelfAttention: attend to nearby items
 # Specifying chunk_len restricts an item to attend within its own chunk, as well
@@ -47,7 +48,8 @@ LSHSelfAttention.n_hashes = 2
 batcher.data_streams = @tf_inputs.data_streams
 batcher.batch_size_per_device = 1
 batcher.eval_batch_size = 8
-batcher.max_eval_length = 65536
+batcher.max_eval_length = 131072
+# batcher.variable_shapes = False
 
 # Parameters for data_streams:
 # ==============================================================================
@@ -110,8 +112,10 @@ ReformerLM.d_model = 768  # Use 1024 if more memory is available
 ReformerLM.d_ff = 2048  # Use 4096 if more memory is available
 ReformerLM.dropout = %dropout
 ReformerLM.ff_activation = @trax.layers.Relu
-ReformerLM.max_len = %max_len
+ReformerLM.max_len = 65536
 ReformerLM.mode = 'train'
 ReformerLM.n_heads = 8
 ReformerLM.n_layers = %n_layers
 ReformerLM.vocab_size = 258  # Includes pad token and unused EOS token
+ReformerLM.pos_axial_shape = (128, 512)
+ReformerLM.pos_d_axial_embs= (256, 512)  # Use (256, 768) if d_model = 1024
