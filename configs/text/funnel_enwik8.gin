@@ -46,7 +46,6 @@ batcher.batch_size_per_device = 1
 batcher.eval_batch_size = 8
 batcher.max_eval_length = 131072
 batcher.buckets = ([1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072], [128, 64,  32, 16, 8, 1, 1, 1])
-# batcher.variable_shapes = False
 
 # Parameters for data_streams:
 # ==============================================================================

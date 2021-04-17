@@ -1,4 +1,4 @@
-# Copyright 2020 The Trax Authors.
+# Copyright 2021 The Trax Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,24 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import trax.data
 import trax.layers
 import trax.models
 import trax.optimizers
-import trax.data.inputs
-import trax.data.tf_inputs
 import trax.supervised.trainer_lib
 
 # Parameters that will vary between experiments:
 # ==============================================================================
-attn_type = [
-    @trax.layers.SelfAttention,
-    @trax.layers.SelfAttention,
-    @LSHSelfAttention,
-    @trax.layers.SelfAttention,
-]
-attn_kv = 64  # Use 128 if more memory is available
+attn_type = @trax.layers.SelfAttention
+
+attn_kv = 16  # Use 128 if more memory is available
 n_layers = 12
 dropout = 0.2
+max_len = 131072
 
 # trax.layers.SelfAttention: attend to nearby items
 # Specifying chunk_len restricts an item to attend within its own chunk, as well
@@ -43,45 +39,19 @@ LSHSelfAttention.n_buckets = 512
 LSHSelfAttention.n_chunks_before = 1
 LSHSelfAttention.n_hashes = 2
 
-max_len = 768
-eval_max_len = 768
+# Parameters for batcher:
+# ==============================================================================
+batcher.data_streams = @tf_inputs.data_streams
+batcher.batch_size_per_device = 1
+batcher.eval_batch_size = 8
+batcher.max_eval_length = 131072
+batcher.buckets = ([1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072], [128, 64,  32, 16, 8, 1, 1, 1])
 
-train/data.Batch.batch_size = 16
-eval/data.Batch.batch_size = 32
-data.generate_sequential_chunks.max_length = 512
-data.PadToLength.pad_value = {0: 0, 1: 0}
-
-make_inputs.train_stream = [
-    @train/data.TFDS(),
-  @data.detuplify(),
-    @train/data.generate_sequential_chunks(),
-  @data.Shuffle(),
-  @data.ConcatenateToLMInput(),
-    @train/data.PadToLength(),
-  @data.AddLossWeights(),
-    @train/data.Batch()
-]
-
-make_inputs.eval_stream = [
-    @eval/data.TFDS(),
-  @data.detuplify(),
-    @eval/data.generate_sequential_chunks(),
-  @data.ConcatenateToLMInput(),
-    @eval/data.PadToLength(),
-  @data.AddLossWeights(),
-    @eval/data.Batch()
-]
-
-data.TFDS.dataset_name = 't2t_enwik8_l65k'
-data.TFDS.keys = ['targets']
-train/data.TFDS.train = True
-eval/data.TFDS.train = False
-
-train/data.generate_sequential_chunks.max_length = %max_len
-train/data.PadToLength.len_map = {0: %max_len , 1: %max_len}
-
-eval/data.generate_sequential_chunks.max_length = %eval_max_len
-eval/data.PadToLength.len_map = {0: %eval_max_len , 1: %eval_max_len}
+# Parameters for data_streams:
+# ==============================================================================
+data_streams.data_dir = None
+data_streams.dataset_name = 't2t_enwik8_l65k'
+data_streams.input_name = 'targets'
 
 # Parameters for multifactor:
 # ==============================================================================
@@ -99,7 +69,6 @@ Adam.eps = 1e-9
 
 # Parameters for train:
 # ==============================================================================
-train.inputs = @data.inputs.make_inputs
 train.eval_frequency = 500
 train.eval_steps = 8
 train.model = @trax.models.ReformerLM
@@ -135,12 +104,13 @@ LSHSelfAttention.predict_mem_len = 16384
 ReformerLM.attention_type = %attn_type
 ReformerLM.d_attention_key = %attn_kv
 ReformerLM.d_attention_value = %attn_kv
-ReformerLM.d_model = 768  # Use 1024 if more memory is available
-ReformerLM.d_ff = 2048  # Use 4096 if more memory is available
+ReformerLM.d_model = 256  # Use 1024 if more memory is available
+ReformerLM.d_ff = 1024  # Use 4096 if more memory is available
 ReformerLM.dropout = %dropout
 ReformerLM.ff_activation = @trax.layers.Relu
-ReformerLM.max_len = %max_len
+ReformerLM.max_len = 70000
 ReformerLM.mode = 'train'
 ReformerLM.n_heads = 8
 ReformerLM.n_layers = %n_layers
 ReformerLM.vocab_size = 258  # Includes pad token and unused EOS token
+ReformerLM.pos_type = 'fixed-base'
