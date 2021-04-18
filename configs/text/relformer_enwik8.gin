@@ -71,7 +71,7 @@ Adam.eps = 1e-9
 # ==============================================================================
 train.eval_frequency = 500
 train.eval_steps = 8
-train.model = @trax.models.ReformerLM
+train.model = @trax.models.RelformerLM
 train.optimizer = @trax.optimizers.Adam
 train.steps = 100000
 train.save_graphs = False
@@ -87,30 +87,28 @@ trax.layers.SelfAttention.n_chunks_after = 0
 # trax.layers.SelfAttention.n_chunks_before: see top
 trax.layers.SelfAttention.n_parallel_heads = 1
 
-# Parameters for LSHSelfAttention:
+# Parameters for SelfAttention:
 # ==============================================================================
-LSHSelfAttention.attention_dropout = 0.2
-# LSHSelfAttention.chunk_len: see top
-# LSHSelfAttention.n_buckets: see top
-LSHSelfAttention.n_chunks_after = 0
-# LSHSelfAttention.n_chunks_before: see top
-# LSHSelfAttention.n_hashes: see top
-LSHSelfAttention.n_parallel_heads = 1
-LSHSelfAttention.predict_drop_len = 256
-LSHSelfAttention.predict_mem_len = 16384
+trax.layers.SelfAttention.chunk_len = %chunk_len
+trax.layers.SelfAttention.n_chunks_after = 0
+trax.layers.SelfAttention.n_chunks_before = 0
 
-# Parameters for ReformerLM:
+# Parameters for RelformerLM:
 # ==============================================================================
-ReformerLM.attention_type = %attn_type
-ReformerLM.d_attention_key = %attn_kv
-ReformerLM.d_attention_value = %attn_kv
-ReformerLM.d_model = 256  # Use 1024 if more memory is available
-ReformerLM.d_ff = 1024  # Use 4096 if more memory is available
-ReformerLM.dropout = %dropout
-ReformerLM.ff_activation = @trax.layers.Relu
-ReformerLM.max_len = 70000
-ReformerLM.mode = 'train'
-ReformerLM.n_heads = 8
-ReformerLM.n_layers = %n_layers
-ReformerLM.vocab_size = 258  # Includes pad token and unused EOS token
-ReformerLM.pos_type = 'fixed-base'
+RelformerLM.vocab_size
+RelformerLM.d_model=512
+RelformerLM.d_ff=2048
+RelformerLM.vanilla_layers=(1, 1)
+RelformerLM.shorten_factor=4
+RelformerLM.n_rel_layers=6
+RelformerLM.rel_chunk_len=None
+RelformerLM.vanilla_chunk_len=None
+RelformerLM.n_heads=8
+RelformerLM.dropout=0.1
+RelformerLM.dropout_shared_axes=None
+RelformerLM.vanilla_attn_type=@trax.layers.SelfAttention
+RelformerLM.pos_type='fixed-base'
+RelformerLM.max_len=3072,
+RelformerLM.n_raw_tokens_generated=1
+RelformerLM.mode='train'
+RelformerLM.ff_activation=tl.FastGelu
