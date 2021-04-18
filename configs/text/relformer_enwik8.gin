@@ -95,7 +95,7 @@ trax.layers.SelfAttention.n_chunks_before = 0
 
 # Parameters for RelformerLM:
 # ==============================================================================
-RelformerLM.vocab_size
+RelformerLM.vocab_size=258 # Includes pad token and unused EOS token
 RelformerLM.d_model=512
 RelformerLM.d_ff=2048
 RelformerLM.vanilla_layers=(1, 1)
