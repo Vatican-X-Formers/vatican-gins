@@ -111,4 +111,4 @@ RelformerLM.pos_type='fixed-base'
 RelformerLM.max_len=3072
 RelformerLM.n_raw_tokens_generated=1
 RelformerLM.mode='train'
-RelformerLM.ff_activation=tl.FastGelu
+RelformerLM.ff_activation=@trax.layers.FastGelu
