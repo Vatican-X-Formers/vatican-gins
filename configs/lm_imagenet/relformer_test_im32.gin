@@ -39,7 +39,7 @@ data_streams.data_dir = None
 data_streams.dataset_name = 'downsampled_imagenet/32x32'
 data_streams.input_name = 'image'
 data_streams.target_name = 'image'
-data_streams.bare_preprocess_fn = @trax.data.tf_inputs.downsampled_imagenet_flatten_bare_preprocess
+data_streams.bare_preprocess_fn = @data.downsampled_imagenet_flatten_bare_preprocess
 
 # Parameters for multifactor:
 # ==============================================================================
