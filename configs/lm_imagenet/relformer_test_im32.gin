@@ -15,7 +15,7 @@
 import trax.layers
 import trax.models
 import trax.optimizers
-import trax.data.tf_inputs
+import trax.data
 import trax.supervised.trainer_lib
 
 # Parameters that will vary between experiments:
@@ -27,7 +27,7 @@ attn_type = @trax.layers.SelfAttention # @CausalFavor
 
 # Parameters for batcher:
 # ==============================================================================
-batcher.data_streams = @tf_inputs.data_streams
+batcher.data_streams = @data.data_streams
 batcher.batch_size_per_device = 8
 batcher.eval_batch_size = 2
 batcher.max_eval_length = 3072  # 64 * 64 * 3
@@ -78,6 +78,7 @@ RelformerLM.d_ff = 2048
 RelformerLM.dropout = 0.0
 RelformerLM.ff_activation = @trax.layers.FastGelu
 RelformerLM.rel_chunk_len = 128
+RelformerLM.vanilla_chunk_len = 64
 RelformerLM.max_len = 3072
 RelformerLM.mode = 'train'
 RelformerLM.n_heads = 8
