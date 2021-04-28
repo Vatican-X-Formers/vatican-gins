@@ -1,0 +1,79 @@
+# Copyright 2020 The Trax Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import trax.models
+import trax.optimizers
+import trax.data
+import trax.supervised.trainer_lib
+
+vocab_size = 13  #  For addition, base = vocab_size - 3.
+max_len = 128
+twice_max_len = 256
+chunk_len = 16
+twice_chunk_len = 32
+
+# Parameters for data_streams:
+# ==============================================================================
+data_streams.data_dir = None
+data_streams.dataset_name = 'copy'
+
+# Parameters for sequence_copy_inputs:
+# ==============================================================================
+sequence_copy_inputs.vocab_size = %vocab_size
+sequence_copy_inputs.batch_size = 128
+sequence_copy_inputs.train_length = %max_len
+sequence_copy_inputs.eval_min_length = %twice_chunk_len
+sequence_copy_inputs.eval_max_length = %max_len
+sequence_copy_inputs.reverse = False
+sequence_copy_inputs.pad_to_multiple = %max_len
+
+# Parameters for multifactor:
+# ==============================================================================
+multifactor.constant = 0.05
+multifactor.factors = 'constant * linear_warmup * rsqrt_decay'
+multifactor.warmup_steps = 4000
+
+# Parameters for TransformerLM:
+# ==============================================================================
+TransformerLM.d_model = 256
+TransformerLM.d_ff = 512
+TransformerLM.dropout = 0.05
+TransformerLM.max_len = %twice_max_len
+TransformerLM.n_heads = 4
+TransformerLM.n_layers = 3
+TransformerLM.vocab_size = %vocab_size
+
+# Parameters for RelformerLM:
+# ==============================================================================
+RelformerLM.d_model = 256
+RelformerLM.d_ff = 512
+RelformerLM.dropout = 0.05
+RelformerLM.max_len = %twice_max_len
+RelformerLM.n_heads = 4
+RelformerLM.vanilla_layers=(0, 0)
+RelformerLM.n_rel_layers = 1
+RelformerLM.shorten_factor = 4
+RelformerLM.vocab_size = %vocab_size
+RelformerLM.rel_chunk_len = %chunk_len
+RelformerLM.vanilla_chunk_len = %chunk_len
+
+# Parameters for train:
+# ==============================================================================
+train.inputs = @data.sequence_copy_inputs
+train.eval_frequency = 5000
+train.eval_steps = 200
+train.optimizer = @trax.optimizers.Adam
+train.steps = 10000
+# train.model = @trax.models.TransformerLM
+train.model = @trax.models.RelformerLM
