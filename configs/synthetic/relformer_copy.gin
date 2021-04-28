@@ -75,5 +75,6 @@ train.eval_frequency = 5000
 train.eval_steps = 200
 train.optimizer = @trax.optimizers.Adam
 train.steps = 10000
+train.checkpoints_at = []
 # train.model = @trax.models.TransformerLM
 train.model = @trax.models.RelformerLM
