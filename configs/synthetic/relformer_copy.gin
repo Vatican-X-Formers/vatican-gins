@@ -21,7 +21,6 @@ vocab_size = 13  #  For addition, base = vocab_size - 3.
 max_len = 128
 twice_max_len = 256
 chunk_len = 16
-twice_chunk_len = 32
 
 # Parameters for data_streams:
 # ==============================================================================
@@ -33,7 +32,7 @@ data_streams.dataset_name = 'copy'
 sequence_copy_inputs.vocab_size = %vocab_size
 sequence_copy_inputs.batch_size = 128
 sequence_copy_inputs.train_length = %max_len
-sequence_copy_inputs.eval_min_length = %twice_chunk_len
+sequence_copy_inputs.eval_min_length = %chunk_len
 sequence_copy_inputs.eval_max_length = %max_len
 sequence_copy_inputs.reverse = False
 sequence_copy_inputs.pad_to_multiple = %max_len
