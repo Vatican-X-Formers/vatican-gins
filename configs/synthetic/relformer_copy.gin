@@ -70,7 +70,7 @@ RelformerLM.vanilla_chunk_len = %chunk_len
 # Parameters for train:
 # ==============================================================================
 train.inputs = @data.sequence_copy_inputs
-train.eval_frequency = 5000
+train.eval_frequency = 500
 train.eval_steps = 200
 train.optimizer = @trax.optimizers.Adam
 train.steps = 10000
