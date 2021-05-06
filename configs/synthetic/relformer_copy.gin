@@ -61,11 +61,15 @@ RelformerLM.dropout = 0.05
 RelformerLM.max_len = %twice_max_len
 RelformerLM.n_heads = 4
 RelformerLM.vanilla_layers=(0, 0)
-RelformerLM.n_rel_layers = 1
+RelformerLM.n_rel_layers = 3
 RelformerLM.shorten_factor = 4
 RelformerLM.vocab_size = %vocab_size
 RelformerLM.rel_chunk_len = %chunk_len
 RelformerLM.vanilla_chunk_len = %chunk_len
+
+# Parameters for Adam:
+# ==============================================================================
+Adam.weight_decay_rate = 0.0
 
 # Parameters for train:
 # ==============================================================================
