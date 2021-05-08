@@ -128,6 +128,7 @@ RelformerLM.d_model = 1024
 RelformerLM.d_ff = 4096
 RelformerLM.vanilla_layers = (3, 3)
 RelformerLM.shorten_factor = 4
+RelformerLM.prefix_lm = True
 RelformerLM.n_rel_layers = %n_layers
 RelformerLM.rel_chunk_len = %rel_chunk_len
 RelformerLM.vanilla_chunk_len = %vanilla_chunk_len
