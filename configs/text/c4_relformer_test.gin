@@ -100,6 +100,7 @@ train.steps = 500000
 train.optimizer = @trax.optimizers.Adafactor
 train.checkpoint_highest = 'neg_log_perplexity'
 train.checkpoint_lowest = 'loss'
+train.permanent_checkpoint_frequency = 50000
 # train.use_memory_efficient_trainer = True
 train.inputs = @data.make_inputs
 
