@@ -1,0 +1,134 @@
+# Copyright 2021 The Trax Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import trax.data
+import trax.models
+import trax.optimizers
+import trax.supervised.trainer_lib
+
+# Macros:
+# ==============================================================================
+n_rel_layers = 6
+rel_chunk_len = 256
+vanilla_chunk_len = 128
+dropout = 0.1
+
+d_model = 512
+d_ff = 2048
+n_heads = 8
+
+train_batch = 8
+valid_batch = 8
+
+max_length = 512
+vocab_size = 32000
+
+
+# Parameters for TFDS data pipeline:
+# ==============================================================================
+make_inputs.train_stream = [
+  @training/data.TFDS(),
+  @data.SentencePieceTokenize(),
+  @data.generate_sequential_chunks(),
+  @data.FilterEmptyExamples(),
+  # @data.AppendValue(),
+  @data.PadToLength(),
+  @data.ConcatenateToLMInput(),
+  @data.AddLossWeights(),
+  @data.Shuffle(),
+  @data.Batch(),
+]
+
+make_inputs.eval_stream = [
+  @validation/data.TFDS(),
+  @data.SentencePieceTokenize(),
+  @data.generate_sequential_chunks(),
+  @data.FilterEmptyExamples(),
+  # @data.AppendValue(),
+  @data.PadToLength(),
+  @data.ConcatenateToLMInput(),
+  @data.AddLossWeights(),
+  @validation/data.Batch(),
+]
+
+# Parameters for data.TFDS:
+# ==============================================================================
+data.TFDS.dataset_name = 'tiny_shakespeare'
+data.TFDS.keys = ('text',)
+data.TFDS.shuffle_train = False
+training/data.TFDS.train = True
+validation/data.TFDS.train = False
+
+# Parameters for data.MLM:
+# ==============================================================================
+data.generate_sequential_chunks.max_length = %max_length
+
+# Parameters for data.AppendValue:
+# ==============================================================================
+data.AppendValue.val = {0: [1]}
+
+# Parameters for data.PadToLength:
+# ==============================================================================
+data.PadToLength.len_map = {0: %max_length}
+data.PadToLength.pad_value = {0: 0}
+
+# Parameters for data.Batch:
+# ==============================================================================
+data.Batch.batch_size = %train_batch
+validation/data.Batch.batch_size = %valid_batch
+
+# Parameters for train:
+# ==============================================================================
+train.eval_frequency = 500
+train.eval_steps = 20
+train.model = @trax.models.RelformerLM
+train.steps = 500000
+train.optimizer = @trax.optimizers.Adafactor
+train.checkpoint_highest = 'neg_log_perplexity'
+train.checkpoint_lowest = 'loss'
+train.permanent_checkpoint_frequency = 50000
+# train.use_memory_efficient_trainer = True
+train.inputs = @data.make_inputs
+
+# Parameters for multifactor:
+# ==============================================================================
+multifactor.constant = 1.0
+multifactor.factors = 'constant * rsqrt_decay'
+multifactor.warmup_steps = 10000
+
+# Parameters for Adafactor:
+# ==============================================================================
+Adafactor.weight_decay_rate = 0.0
+Adafactor.beta1 = 0.0
+Adafactor.decay_rate = 0.8
+Adafactor.clipping_threshold = 1.0
+Adafactor.epsilon1 = 1e-16
+Adafactor.epsilon2 = 0.001
+Adafactor.factored = True
+Adafactor.multiply_by_parameter_scale = True
+
+# Parameters for RelformerLM:
+# ==============================================================================
+RelformerLM.vocab_size = %vocab_size # Includes pad token (0) and unused EOS token (1)
+RelformerLM.d_model = %d_model
+RelformerLM.d_ff = %d_ff
+RelformerLM.vanilla_layers = (0, 0)
+RelformerLM.shorten_factor = 4
+RelformerLM.prefix_lm = True
+RelformerLM.n_rel_layers = %n_rel_layers
+RelformerLM.rel_chunk_len = %rel_chunk_len
+RelformerLM.vanilla_chunk_len = %vanilla_chunk_len
+RelformerLM.n_heads = %n_heads
+RelformerLM.dropout = %dropout
+RelformerLM.max_len = %max_length
