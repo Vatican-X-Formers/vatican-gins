@@ -78,6 +78,10 @@ data.generate_sequential_chunks.max_length = %max_length
 # ==============================================================================
 data.AppendValue.val = {0: [1]}
 
+# Parameters for data.AddLossWeights:
+# ==============================================================================
+data.AddLossWeights.id_to_mask = 0
+
 # Parameters for data.PadToLength:
 # ==============================================================================
 data.PadToLength.len_map = {0: %max_length}
