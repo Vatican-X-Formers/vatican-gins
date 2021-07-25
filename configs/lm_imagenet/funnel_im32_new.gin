@@ -53,7 +53,12 @@ Adam.eps = 1e-09
 # ==============================================================================
 train.eval_frequency = 500
 train.eval_steps = 256
-train.eval_steps_at_the_end = 5000
+train.callbacks = (
+  @trax.supervised.callbacks.FullEvaluationCallback,
+)
+FullEvaluationCallback.n_eval_batches = 6250
+FullEvaluationCallback.eval_after_last_train_steps = 2
+
 train.model = @trax.models.FunnelTransformerLM
 train.optimizer = @trax.optimizers.Adam
 train.steps = 20000
