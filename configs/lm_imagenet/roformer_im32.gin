@@ -59,7 +59,7 @@ train.callbacks = (
 FullEvaluationCallback.n_eval_batches = 6250
 FullEvaluationCallback.eval_after_last_train_steps = 2
 
-train.model = @trax.models.FunnelTransformerLM
+train.model = @trax.models.ReformerLM
 train.optimizer = @trax.optimizers.Adam
 train.steps = 20000
 train.checkpoints_at = []
