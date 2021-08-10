@@ -1,0 +1,86 @@
+# Copyright 2021 The Trax Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import trax.data
+import trax.layers
+import trax.models
+import trax.optimizers
+import trax.supervised.trainer_lib
+
+
+# Parameters for batcher:
+# ==============================================================================
+batcher.data_streams = @data.data_streams
+batcher.max_eval_length = 2048
+batcher.buckets = ([2048], [8])
+batcher.id_to_mask = 0
+
+# Parameters for data_streams:
+# ==============================================================================
+data_streams.data_dir = None
+data_streams.dataset_name = 't2t_enwik8_l2k'
+data_streams.input_name = 'targets'
+
+# Parameters for multifactor: # ============================================================================== # 0.03125 ~= 1024^-0.5 = d_model^-0.5
+multifactor.constant = 4.1e-4
+multifactor.factors = 'constant * linear_warmup * cosine_decay'
+multifactor.warmup_steps = 4000
+multifactor.steps_per_cycle = 200000
+
+# Parameters for Adam:
+# ==============================================================================
+Adam.weight_decay_rate=0.0
+Adam.b1 = 0.9
+Adam.b2 = 0.98
+Adam.eps = 1e-9
+
+# Parameters for Adafactor:
+# ==============================================================================
+Adafactor.beta1 = 0.0
+Adafactor.decay_rate = 0.8
+Adafactor.do_clipping = True
+Adafactor.clipping_threshold = 1.0
+Adafactor.epsilon1 = 1e-16
+Adafactor.epsilon2 = 0.001
+Adafactor.factored = True
+Adafactor.multiply_by_parameter_scale = True
+
+
+# Parameters for train:
+# ==============================================================================
+train.eval_frequency = 500
+train.eval_steps = 40
+train.callbacks = (
+  @trax.supervised.callbacks.FullEvaluationCallback,
+)
+FullEvaluationCallback.n_eval_batches = 306
+FullEvaluationCallback.eval_after_last_train_steps = 50
+train.model = @trax.models.FunnelTransformerLM
+train.optimizer = @trax.optimizers.Adam
+train.steps = 200000
+train.save_graphs = False
+train.checkpoints_at = []
+
+
+# Parameters for FunnelTransformerLM:
+# ==============================================================================
+FunnelTransformerLM.d_ff = 2048
+FunnelTransformerLM.d_model = 512
+FunnelTransformerLM.dropout = 0.15
+FunnelTransformerLM.vanilla_layers = (3,3)
+FunnelTransformerLM.n_funnel_blocks = (4,)
+FunnelTransformerLM.shorten_factors = (2,)
+FunnelTransformerLM.n_heads = 8
+FunnelTransformerLM.vocab_size = 256
+FunnelTransformerLM.ff_activation = @trax.layers.FastGelu
