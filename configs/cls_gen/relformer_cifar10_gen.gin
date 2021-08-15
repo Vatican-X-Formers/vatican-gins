@@ -38,9 +38,9 @@ data_streams.bare_preprocess_fn = \
 # Parameters for multifactor:
 # ==============================================================================
 # 0.0442 ~= 512^-0.5 = d_model^-0.5
-multifactor.constant = 0.0442
+multifactor.constant = 0.01
 multifactor.factors = 'constant * linear_warmup * rsqrt_decay'
-multifactor.warmup_steps = 8000
+multifactor.warmup_steps = 10000
 
 # Parameters for Adafactor:
 # ==============================================================================
