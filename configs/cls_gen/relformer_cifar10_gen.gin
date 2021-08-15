@@ -76,7 +76,6 @@ RelformerLM.vanilla_layers=(1, 1)
 RelformerLM.n_funnel_blocks=(12,)
 RelformerLM.shorten_factors=(3,)
 RelformerLM.dropout = 0.0
-RelformerLM.max_len = 3072
 RelformerLM.mode = 'train'
 RelformerLM.n_heads = 8
 RelformerLM.vocab_size = 256
