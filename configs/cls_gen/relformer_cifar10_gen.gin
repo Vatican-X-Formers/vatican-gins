@@ -60,8 +60,8 @@ Adafactor.epsilon2=1e-3
 
 # Parameters for train:
 # ==============================================================================
-train.eval_frequency = 500
-train.eval_steps = 256
+train.eval_frequency = 2000
+train.eval_steps = 625
 
 train.model = @trax.models.RelformerLM
 train.optimizer = @trax.optimizers.Adafactor
