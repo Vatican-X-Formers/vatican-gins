@@ -14,13 +14,13 @@
 
 import trax.models
 import trax.optimizers
-import trax.data
+import trax.data.inputs
+import trax.data.tf_inputs
 import trax.supervised.trainer_lib
 
 vocab_size = 13  #  For addition, base = vocab_size - 3.
-max_len = 128
-twice_max_len = 256
-chunk_len = 16
+max_len = 64
+twice_max_len = 128
 
 # Parameters for data_streams:
 # ==============================================================================
@@ -32,7 +32,7 @@ data_streams.dataset_name = 'copy'
 sequence_copy_inputs.vocab_size = %vocab_size
 sequence_copy_inputs.batch_size = 128
 sequence_copy_inputs.train_length = %max_len
-sequence_copy_inputs.eval_min_length = %chunk_len
+sequence_copy_inputs.eval_min_length = 4
 sequence_copy_inputs.eval_max_length = %max_len
 sequence_copy_inputs.reverse = False
 sequence_copy_inputs.pad_to_multiple = %max_len
@@ -58,26 +58,22 @@ TransformerLM.vocab_size = %vocab_size
 RelformerLM.d_model = 256
 RelformerLM.d_ff = 512
 RelformerLM.dropout = 0.05
-RelformerLM.max_len = %twice_max_len
 RelformerLM.n_heads = 4
 RelformerLM.vanilla_layers=(0, 0)
-RelformerLM.n_rel_layers = 3
-RelformerLM.shorten_factor = 4
+RelformerLM.n_funnel_blocks=(1,)
+RelformerLM.shorten_factors=(4,)
 RelformerLM.vocab_size = %vocab_size
-RelformerLM.rel_chunk_len = %chunk_len
-RelformerLM.vanilla_chunk_len = %chunk_len
 
-# Parameters for Adam:
-# ==============================================================================
+# Parameters for Adam
 Adam.weight_decay_rate = 0.0
 
 # Parameters for train:
 # ==============================================================================
-train.inputs = @data.sequence_copy_inputs
-train.eval_frequency = 500
+train.inputs = @trax.data.sequence_copy_inputs
+# train.inputs = @trax.data.inputs.addition_inputs
+train.eval_frequency = 5000
 train.eval_steps = 200
 train.optimizer = @trax.optimizers.Adam
 train.steps = 10000
-train.checkpoints_at = []
 # train.model = @trax.models.TransformerLM
 train.model = @trax.models.RelformerLM
