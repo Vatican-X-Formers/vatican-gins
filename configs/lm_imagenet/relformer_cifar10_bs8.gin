@@ -18,9 +18,6 @@ import trax.models
 import trax.optimizers
 import trax.supervised.trainer_lib
 
-# macros
-vanilla_attn_type = @trax.layers.SelfAttention
-
 # Parameters for batcher:
 # ==============================================================================
 batcher.data_streams = @data.data_streams
@@ -65,11 +62,16 @@ Adafactor.epsilon2=1e-3
 # ==============================================================================
 train.eval_frequency = 2000
 train.eval_steps = 625
-
+train.checkpoints_at = [10000, 20000, 30000, 40000, 50000, 60000]
 train.model = @trax.models.RelformerLM
 train.optimizer = @trax.optimizers.Adafactor
-train.steps = 200000
-train.checkpoints_at = []
+train.steps = 60000
+
+train.callbacks = (
+  @trax.supervised.callbacks.FullEvaluationCallback,
+)
+FullEvaluationCallback.n_eval_batches = 1250
+FullEvaluationCallback.eval_after_last_train_steps = 5
 
 # Parameters for RelformerLM:
 # ==============================================================================
@@ -82,16 +84,7 @@ RelformerLM.dropout = 0.0
 RelformerLM.mode = 'train'
 RelformerLM.n_heads = 8
 RelformerLM.vocab_size = 256
-# RelformerLM.vanilla_attn_type = %vanilla_attn_type
-# RelformerLM.downsampling_fn = @LinearPooling
-# RelformerLM.upsampling_fn = @LinearUpsampling
 RelformerLM.attention_upsampling_fn = @LinearUpsampling
-
-# Parameters for SelfAttention:
-# ==============================================================================
-layers.SelfAttention.chunk_len = 128
-layers.SelfAttention.n_chunks_after = 0
-layers.SelfAttention.n_chunks_before = 1
 
 # Parameters for TransformerLM:
 # ==============================================================================
