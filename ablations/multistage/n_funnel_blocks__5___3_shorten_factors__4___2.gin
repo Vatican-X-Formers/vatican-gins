@@ -68,11 +68,10 @@ train.checkpoints_at = []
 RelformerLM.d_ff = 2048
 RelformerLM.d_model = 512
 RelformerLM.dropout = 0.15
-RelformerLM.vanilla_layers = (3,3)
-RelformerLM.n_funnel_blocks = (12,)
-RelformerLM.shorten_factors = (4,)
+RelformerLM.vanilla_layers = (1,1)
+RelformerLM.n_funnel_blocks = [5, 3]
+RelformerLM.shorten_factors = [4, 2]
 RelformerLM.n_heads = 8
 RelformerLM.vocab_size = 256
 RelformerLM.attention_upsampling_fn = @LinearUpsampling
 RelformerLM.ff_activation = @trax.layers.FastGelu
-
