@@ -1,0 +1,147 @@
+import trax.data
+import trax.layers
+import trax.models
+import trax.optimizers
+import trax.supervised.trainer_lib
+
+# Parameters for Adam:
+# ==============================================================================
+Adam.b1 = 0.9
+Adam.b2 = 0.98
+Adam.clip_grad_norm = None
+Adam.eps = 1e-09
+Adam.learning_rate = 0.0001
+Adam.weight_decay_rate = 0.0
+
+# Parameters for backend:
+# ==============================================================================
+backend.name = 'jax'
+
+# Parameters for batcher:
+# ==============================================================================
+batcher.batch_shuffle_size = None
+batcher.batch_size = None
+batcher.batch_size_per_device = 32
+batcher.bucket_length = 32
+batcher.buckets = ([2048], [8])
+batcher.buckets_include_inputs_in_length = False
+batcher.data_streams = @data.data_streams
+batcher.eval_batch_size = 32
+batcher.id_to_mask = 0
+batcher.max_eval_length = 2048
+batcher.strict_pad_on_len = False
+batcher.variable_shapes = True
+
+# Parameters for data_streams:
+# ==============================================================================
+data_streams.bare_preprocess_fn = None
+data_streams.data_dir = None
+data_streams.dataset_name = 't2t_enwik8_l2k'
+data_streams.eval_holdout_size = 0
+data_streams.input_name = 'targets'
+data_streams.shuffle_buffer_size = 1024
+data_streams.target_name = None
+
+# Parameters for debug_pipeline:
+# ==============================================================================
+debug_pipeline.debug = False
+debug_pipeline.log_prefix = None
+debug_pipeline.method = 'pow'
+
+# Parameters for EvalTask:
+# ==============================================================================
+EvalTask.export_prefix = None
+EvalTask.sample_batch = None
+
+# Parameters for FastGelu:
+# ==============================================================================
+# None.
+
+# Parameters for FullEvaluationCallback:
+# ==============================================================================
+FullEvaluationCallback.eval_after_last_train_steps = 50
+FullEvaluationCallback.n_eval_batches = 305
+
+# Parameters for LayerNorm:
+# ==============================================================================
+LayerNorm.center = True
+LayerNorm.epsilon = 1e-06
+
+# Parameters for LinearUpsampling:
+# ==============================================================================
+LinearUpsampling.dropout = 0.0
+
+# Parameters for multifactor:
+# ==============================================================================
+multifactor.constant = 0.00041
+multifactor.decay_factor = 0.5
+multifactor.factors = 'constant * linear_warmup * cosine_decay'
+multifactor.minimum = 0
+multifactor.second_constant = 0.01
+multifactor.second_constant_step = 10000
+multifactor.steps_per_cycle = 200000
+multifactor.steps_per_decay = 20000
+multifactor.warmup_steps = 4000
+
+# Parameters for NeptuneRunWrapper:
+# ==============================================================================
+NeptuneRunWrapper.enabled = True
+
+# Parameters for num_devices:
+# ==============================================================================
+num_devices.value = None
+
+# Parameters for RelformerLM:
+# ==============================================================================
+RelformerLM.attention_upsampling_fn = @LinearUpsampling
+RelformerLM.d_ff = 2048
+RelformerLM.d_model = 512
+RelformerLM.dropout = 0.15
+RelformerLM.dropout_shared_axes = None
+RelformerLM.ff_activation = @trax.layers.FastGelu
+RelformerLM.n_funnel_blocks = [1, 4]
+RelformerLM.n_heads = 8
+RelformerLM.shorten_factors = [2, 2]
+RelformerLM.vanilla_layers = (2, 2)
+RelformerLM.vocab_size = 256
+
+# Parameters for train:
+# ==============================================================================
+train.adasum = False
+train.additional_eval_streams = None
+train.additional_eval_tasks = None
+train.additional_train_tasks = None
+train.callbacks = (@trax.supervised.callbacks.FullEvaluationCallback,)
+train.checkpoint_highest = None
+train.checkpoint_lowest = None
+train.checkpoints_at = []
+train.eval_frequency = 2000
+train.eval_steps = 305
+train.init_checkpoint = None
+train.loss_chunk_size = 0
+train.metrics = None
+train.model = @trax.models.RelformerLM
+train.n_weights_shards = 1
+train.optimizer = @trax.optimizers.Adam
+train.permanent_checkpoint_frequency = None
+train.permanent_checkpoints_at = None
+train.random_seed = None
+train.save_graphs = False
+train.steps = 200000
+train.use_loop = True
+train.use_memory_efficient_trainer = False
+
+# Parameters for TrainTask:
+# ==============================================================================
+TrainTask.export_prefix = None
+TrainTask.loss_name = None
+TrainTask.sample_batch = None
+
+# Parameters for WeightedCategoryAccuracy:
+# ==============================================================================
+# None.
+
+# Parameters for WeightedCategoryCrossEntropy:
+# ==============================================================================
+WeightedCategoryCrossEntropy.cutoff = 0.0
+WeightedCategoryCrossEntropy.label_smoothing = None
