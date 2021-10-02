@@ -64,8 +64,10 @@ RelformerLM.n_funnel_blocks=(1,)
 RelformerLM.vocab_size = %vocab_size
 RelformerLM.attention_upsampling_fn = @NaiveUpsampling
 
-RelformerLM.sf_dropout = True
-RelformerLM.eval_sf = 5
+AveragePoolingDropout.sf_dropout = True
+AveragePoolingDropout.min_sf = 2
+AveragePoolingDropout.max_sf = 3
+AveragePoolingDropout.eval_sf = 3
 
 # Parameters for Adam
 Adam.weight_decay_rate = 0.0
