@@ -62,6 +62,7 @@ RelformerLM.n_heads = 1
 RelformerLM.vanilla_layers=(0, 0)
 RelformerLM.n_funnel_blocks=(1,)
 RelformerLM.vocab_size = %vocab_size
+RelformerLM.attention_downsampling_fn = @AveragePoolingDropout
 RelformerLM.attention_upsampling_fn = @NaiveUpsampling
 
 AveragePoolingDropout.sf_dropout = True
