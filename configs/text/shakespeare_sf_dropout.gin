@@ -1,0 +1,121 @@
+# Copyright 2021 The Trax Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import trax.layers
+import trax.models
+import trax.optimizers
+import trax.data.inputs
+import trax.data.tf_inputs
+import trax.supervised.trainer_lib
+
+dataset_name = 'tiny_shakespeare'
+
+# max_len = 129
+# max_len = 128
+max_len = 96
+# max_len_1p = 32
+# eval_max_len = 258
+# eval_max_len = 256
+eval_max_len = 96
+# eval_max_len_1p = 128
+
+train/data.Batch.batch_size = 32
+eval/data.Batch.batch_size = 64
+
+data.Tokenize.vocab_type = 'char'
+# data.AppendValue.val = {0:[1], 1:[1]}
+data.PadToLength.pad_value = {0: 0, 1: 0}
+
+make_inputs.train_stream = [
+    @train/data.TFDS(),
+  @data.ConvertToUnicode(),
+  @data.Tokenize(),
+  @data.detuplify(),
+    @train/data.generate_sequential_chunks(),
+  @data.Shuffle(),
+  @data.ConcatenateToLMInput(),
+#   @data.AppendValue(),
+    @train/data.PadToLength(),
+  @data.AddLossWeights(),
+    @train/data.Batch()
+]
+
+make_inputs.eval_stream = [
+    @eval/data.TFDS(),
+  @data.ConvertToUnicode(),
+  @data.Tokenize(),
+  @data.detuplify(),
+    @eval/data.generate_sequential_chunks(),
+  @data.ConcatenateToLMInput(),
+#   @data.AppendValue(),
+    @eval/data.PadToLength(),
+  @data.AddLossWeights(),
+    @eval/data.Batch()
+]
+
+data.TFDS.keys = ['text']
+data.TFDS.dataset_name = %dataset_name
+train/data.TFDS.train = True
+eval/data.TFDS.train = False
+
+train/data.generate_sequential_chunks.max_length = %max_len
+train/data.PadToLength.len_map = {0: %max_len , 1: %max_len}
+
+eval/data.generate_sequential_chunks.max_length = %eval_max_len
+eval/data.PadToLength.len_map = {0: %eval_max_len , 1: %eval_max_len}
+
+# Parameters for multifactor:
+# ==============================================================================
+# 0.0442 ~= 512^-0.5 = d_model^-0.5
+multifactor.constant = 0.0442
+multifactor.factors = 'constant * linear_warmup * rsqrt_decay'
+multifactor.warmup_steps = 1000
+
+# ==============================================================================
+Adam.weight_decay_rate = 0.0
+Adam.b1 = 0.9
+Adam.b2 = 0.98
+Adam.eps = 1e-09
+
+# Parameters for train:
+# ==============================================================================
+train.inputs = @data.make_inputs
+# train.eval_frequency = 5000
+train.eval_frequency = 100
+train.eval_steps = 100
+train.permanent_checkpoints_at = [25000, 50000, 75000, 100000]
+train.checkpoints_at = [5000, 20000, 50000]
+train.model = @trax.models.RelformerLM
+train.optimizer = @trax.optimizers.Adam
+train.steps = 50001
+# train.init_checkpoint = '/content/train_dir_10k/model.pkl.gz
+
+NeptuneRunWrapper.enabled = False
+
+# Parameters for RelformerLM:
+# ==============================================================================
+RelformerLM.d_model = 64
+RelformerLM.d_ff = 128
+RelformerLM.dropout = 0.0
+RelformerLM.n_heads = 1
+RelformerLM.vanilla_layers=(0, 0)
+RelformerLM.n_funnel_blocks=(1,)
+RelformerLM.vocab_size = 256
+RelformerLM.attention_downsampling_fn = @AveragePoolingDropout
+RelformerLM.attention_upsampling_fn = @NaiveUpsampling
+
+AveragePoolingDropout.sf_dropout = True
+AveragePoolingDropout.eval_sf = 2
+AveragePoolingDropout.min_sf = 2
+AveragePoolingDropout.max_sf = 3
